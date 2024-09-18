@@ -1,6 +1,7 @@
 'use strict'
 
 var peliculas = require('../models/peliculas');
+const User = require('../models/usuarios'); 
 
 
 function crearPelicula(req, resp){
@@ -49,6 +50,38 @@ function editarPelicula(req, resp){
 
 }
 
+function consultarPelicula(req, resp){
+    peliculas.findOne({titulo: req.body.titulo}).then(
+        (peliculaEncontrada)=>{
+            if(peliculaEncontrada == null){
+                resp.status(403).send({message: 'Pelicula no encontrada'});
+            }
+            else{
+                resp.status(200).send({message: 'Pelicula encontrada', pelicula: peliculaEncontrada});
+            }
+        },
+        (err)=>{
+            resp.status(500).send({message: 'Error al buscar la pelicula'});
+        }
+    )
+}
+
+function consultarParametros(req, resp){
+    peliculas.find({lanzamiento: {$gt: req.body.lanzamiento}} && {precio: {$lte: req.body.precio}}).then(
+        (peliculaEncontrada)=>{
+            if(peliculaEncontrada == null){
+                resp.status(403).send({message: 'Pelicula no encontrada'});
+            }
+            else{
+                resp.status(200).send({message: 'Pelicula encontrada', pelicula: peliculaEncontrada});
+            }
+        },
+        (err)=>{
+            resp.status(500).send({message: 'Error al buscar la pelicula'});
+        }
+    )
+}
+
 module.exports = {
-    crearPelicula, editarPelicula
+    crearPelicula, editarPelicula, consultarPelicula, consultarParametros
 }

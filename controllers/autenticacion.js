@@ -44,11 +44,12 @@ function IniciarSesion (req, resp){
                 resp.status(403).send({message: 'Usuario no encontrado'});
             }
             else{
+                console.log(usuarioEncontrado);
                 if(bcrypt.compareSync(
                     passwordIngresado, usuarioEncontrado.password)){
                         resp.status(200).send({
                             message: 'Login exitoso',
-                            token: token.generarTokenDeUsuario(usuarioEncontrado)
+                            token: token.generarTokenDeUsuario(usuarioEncontrado),
                         })
                     }
                     else{
