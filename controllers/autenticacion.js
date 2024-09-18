@@ -3,6 +3,7 @@
 var Usuario = require('../models/usuarios');
 var token = require('../helpers/authhelper');
 var bcrypt = require('bcryptjs');
+const usuarios = require('../models/usuarios');
 
 
 function registrarUsuario(req, resp){
@@ -49,7 +50,10 @@ function IniciarSesion (req, resp){
                     passwordIngresado, usuarioEncontrado.password)){
                         resp.status(200).send({
                             message: 'Login exitoso',
-                            token: token.generarTokenDeUsuario(usuarioEncontrado),
+                            usuarioN: usuarioEncontrado.nombre,
+                            usuarioA: usuarioEncontrado.apellidos,
+                            usuarioE: usuarioEncontrado.email,
+                            token: token.generarTokenDeUsuario(usuarioEncontrado)
                         })
                     }
                     else{
@@ -63,6 +67,8 @@ function IniciarSesion (req, resp){
     )
 
 }
+
+
 
 module.exports = {
     IniciarSesion, registrarUsuario
